@@ -17,6 +17,6 @@ root.geometry('1355x825')#To fix the size and geometry of the window
 
 root.iconbitmap('flaskicon.ico')#Adding a flask shaped icon to the window
 
-print('Hello')
+
 
 mainloop()
