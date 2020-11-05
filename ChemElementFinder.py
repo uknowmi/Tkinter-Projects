@@ -136,18 +136,78 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            }
 
 # Making the BaseFrame to show credits
+#_________________________________________________________________________________
 BaseFrame = LabelFrame(root, text='Credits', padx=10, pady=2, bd=4, relief=SUNKEN)
 
 BaseFrame.grid(row=3, column=0, columnspan=5, sticky=W + E)
 
 # Creating a label to add the text in the BaseFrame
-
 BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 11 * (
     "	") + "Subject Teacher : Nishant Dubey (PGT Computer Science) ", font=('Calibri', 10), anchor=W, fg='black')
 
 BaseLabel.pack() # Packing the BaseLabel in the frame
+#_________________________________________________________________________________
 
 
+
+# Making the frame to show links related to elements
+#_______________________________________________________________
+LinkFrame = LabelFrame(root, text='LINKS', padx=75, pady=290)
+LinkFrame.grid(row=1, column=0, columnspan=1, rowspan=2)
+
+EmptyLabel=Label(LinkFrame,text='')
+EmptyLabel.pack()
+#_______________________________________________________________
+
+
+# The search frame to search for elements
+#_____________________________________________________________________________________
+SearchFrame = LabelFrame(root, text='SEARCH BOX', )
+SearchFrame.grid(row=1, column=4)
+SearchEntry = Entry(SearchFrame, width=20, font=('Comic Sans Ms', 15))
+SearchEntry.grid(row=0, column=0, pady=30, columnspan=2, padx=50)
+urchoice = StringVar()
+choices = OptionMenu(SearchFrame, urchoice, 'Atomic Number', 'Name', 'Symbol', 'Any')
+choices.grid(row=1, column=1, pady=10)
+urchoice.set('Any')
+print(choices)
+SearchByLabel = Label(SearchFrame, text='Search By', font=('Calibri', 15))
+SearchByLabel.grid(row=1, column=0, pady=10)
+SearchButton = Button(SearchFrame, text='Search', font=('Calibri', 15),
+                      command=lambda: search(SearchEntry.get(), urchoice.get()))
+SearchButton.grid(row=2, column=0, columnspan=2, pady=20)
+#_____________________________________________________________________________________
+
+
+
+#Making the frame to show the results of the search
+#_______________________________________________________
+SearchResultsFrame = LabelFrame(root, text='Search results')
+SearchResultsFrame.grid(row=1, column=1, columnspan=3, rowspan=2)
+SearchLabel = Label(SearchResultsFrame, text='Active', bd=2, anchor=NW, relief=SOLID)
+SearchLabel.grid(row=0, column=0, sticky=W + E)
+
+InfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)
+InfoFrame.grid(row=1, column=0, sticky=W + E)
+InfoFrameLabel = Label(InfoFrame, text='General Info here')
+InfoFrameLabel.grid(row=0, column=0, padx=325, pady=110)
+
+DInfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)
+DInfoFrame.grid(row=2, column=0, sticky=W + E)
+DInfoFrameLabel = Label(DInfoFrame, text='Detailed Info Here')
+DInfoFrameLabel.grid(row=0, column=0, padx=325, pady=150)
+#___________________________________________________________
+
+
+
+# The image frame
+#_____________________________________________________________________________________
+ImageFrame = LabelFrame(root, text='Image Box')
+ImageFrame.grid(row=2, column=4)
+
+ImageLabel = Label(ImageFrame, text='Images come here', padx=20, pady=20)
+ImageLabel.grid(row=0, column=0, padx=130, pady=155)
+#_____________________________________________________________________________________
 
 
 
