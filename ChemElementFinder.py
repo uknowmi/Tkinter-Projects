@@ -13,17 +13,8 @@ my_notebook=ttk.Notebook(root)#Creating a notebook to show tabs
 
 my_notebook.grid(row=0,column=0)
 
-HomeFrame=Frame(my_notebook,padx=12,pady=10)
-HomeFrame.pack(fill='both',expand=1)
-my_notebook.add(HomeFrame,text='Home')
 
-PeriodicTableFrame=Frame(my_notebook,padx=12,pady=10)
-PeriodicTableFrame.pack(fill='both',expand=1)
-my_notebook.add(PeriodicTableFrame,text='Periodic Table')
 
-HelpFrame=Frame(my_notebook,padx=12,pady=10)
-HelpFrame.pack(fill='both',expand=1)
-my_notebook.add(HelpFrame,text='HelpFrame')
 
 
 root.title('ChemElement Finder')#Setting title of the window
@@ -153,19 +144,127 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            117: ['Tennessine', 'Ts', '294', '294', 'p', 17, 7, '[Rn] 6d10 7s2 7p5'],
            118: ['Oganesson', 'Og', '294', '294', 'p', 18, 7, '[Rn] 6d10 7s2 7p6']
            }
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 #All the functions come here
-#_____________________________________________________________________________________________________________
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
+
+#search function
+#____________________________________________________________
+def search(val,type_,way='SearchBox'):
+
+	if SearchEntry.get() not in '                                ':
+		SearchEntry.delete(0, END)
+	if way=='PT':
+
+		my_notebook.select(HomeFrame)
+	if type_ == 'Atomic Number':
+		try:
+			a = int(val)
+			InfoFrame.grid_forget()
+			x = bigdict[a][0]
+		except:
+			pass
 
 
+	elif type_ == 'Symbol':
+	    for i in range(1, 119):
+	        if (bigdict[i][1]).lower() == val.lower():
+	            a = i
 
+	elif type_ == 'Name':
+	    for i in range(1, 119):
+	        if val.lower() in (bigdict[i][0]).lower():
+	            a = i
+	elif type_ == 'Any':
+	    if len(val) <= 3:
+	        try:
+	            a = int(val)
+	            type_ = 'Atomic Number'
+	        except:
+	            type_ = 'Symbol'
+	            for i in range(1, 119):
+	                if (bigdict[i][1]).lower() == val.lower():
+	                    a = i
+	                    type_ = 'Symbol'
+	    else:
+	        type_ = 'Name'
+	        for i in range(1, 119):
+	            if val.lower() in (bigdict[i][0]).lower() and len(val) >= 3:
+	                a = i
+	                type_ = 'Name'
 
+	InfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)
+	InfoFrame.grid(row=1, column=0, sticky=W + E)
+	
+	SearchLabel = Label(SearchResultsFrame, text="You searched for " + type_ + ' ' + str(SearchEntry.get()), anchor=NW,
+	                    bd=3, relief=SUNKEN)
+	SearchLabel.grid(row=0, column=0, sticky=W + E)
 
+	try:
+	    AtnoLabel = Label(InfoFrame, text='Atomic Number:		' + str(a), anchor=W, font=('Comic Sans Ms', 13),
+	                       fg='blue')
+	    NameLabel = Label(InfoFrame, text='Name:			' + bigdict[a][0], anchor=W, font=('Comic Sans Ms', 13),
+	                       fg='green')
+	    SymbolLabel = Label(InfoFrame, text='Symbol:			' + bigdict[a][1], anchor=W, font=('Comic Sans Ms', 13),
+	                       fg='red')
+	    AtmassLabel = Label(InfoFrame, text='Atomic Mass:		' + str(bigdict[a][2]), anchor=W,font=('Comic Sans Ms', 13), 
+	    				   fg='violet')
+	    MassnonoLabel = Label(InfoFrame, text='Mass Number:		' + str(bigdict[a][3]), anchor=W,font=('Comic Sans Ms', 13),
+	                       fg='indigo')
+	    BlockLabel = Label(InfoFrame, text='Block:			' + bigdict[a][4], anchor=W, font=('Comic Sans Ms', 13),
+	                       fg='brown')
+	    GroupLabel = Label(InfoFrame, text='Group:			' + str(bigdict[a][5]), anchor=W,font=('Comic Sans Ms', 13),
+	                       fg='grey')
+	    PeriodLabel = Label(InfoFrame, text='Period:			' + str(bigdict[a][6]), anchor=W,font=('Comic Sans Ms', 13),
+	                       fg='purple')
 
+	    AtnoLabel.grid(row=1, column=0, sticky=W)
+	    NameLabel.grid(row=2, column=0, sticky=W)
+	    SymbolLabel.grid(row=3, column=0, sticky=W)
+	    AtmassLabel.grid(row=4, column=0, sticky=W)
+	    MassnonoLabel.grid(row=5, column=0, sticky=W)
+	    BlockLabel.grid(row=6, column=0, sticky=W)
+	    GroupLabel.grid(row=7, column=0, sticky=W)
+	    PeriodLabel.grid(row=8, column=0, sticky=W)
+	
+	except:
+
+	    SearchLabel.grid_forget()
+	    SearchLabel = Label(SearchResultsFrame, text="You gave invalid input", anchor=NW, bd=3, relief=SUNKEN, fg='red')
+	    SearchLabel.grid(row=0, column=0, sticky=W + E)
+
+	    if type_=='Atomic Number':
+	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' +'Element with atomic number '+str(a)+' does not exist'+ '\nPlease try again')
+	    else:
+	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' + 'Please try again')
+#_____________________________________________________________
+
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
+
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+#Making the Home screen
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
 #____________________________________________________________________________________________________________
 
 
-
-
+#_____________________________________________________________________________
+HomeFrame=Frame(my_notebook,padx=12,pady=10)
+HomeFrame.pack(fill='both',expand=1)
+my_notebook.add(HomeFrame,text='   Home   ')
+#______________________________________________________________________________
 
 
 
@@ -248,6 +347,89 @@ ImageLabel = Label(ImageFrame, text='Images come here', padx=20, pady=20)#Adding
 ImageLabel.grid(row=0, column=0, padx=130, pady=155)#Positioning the label
 #_____________________________________________________________________________________
 
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
 
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+#Making the periodic table screen
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
+
+PeriodicTableFrame=Frame(my_notebook,padx=12,pady=10)
+PeriodicTableFrame.pack(fill='both',expand=1)
+my_notebook.add(PeriodicTableFrame,text='   Periodic Table   ')
+
+pt_notebook=ttk.Notebook(PeriodicTableFrame)
+pt_notebook.grid(row=0, column=0)
+
+
+ptFrame = LabelFrame(pt_notebook,padx=115)
+ptFrame.grid(row=1, column=1, columnspan=3, rowspan=2,sticky=W+E)
+pt_notebook.add(ptFrame,text='   Button Periodic Table   ')
+
+pt_label=Label(ptFrame,text='Click on any of the symbol given here to\n see information about it', font=('Comic Sans Ms', 20))
+pt_label.grid(row=2,column=3,columnspan=10,rowspan=2)
+
+
+for i in range(1, 57):
+    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='blue').grid(row=bigdict[i][6],
+                                                                                            column=bigdict[i][5])
+for i in range(72, 89):  # f block interruption
+    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='purple').grid(row=bigdict[i][6],
+                                                                                            column=bigdict[i][5])
+for i in range(104, 119):  # f block interruption
+    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='green').grid(row=bigdict[i][6],
+                                                                                            column=bigdict[i][5])
+GapLabel=Label(ptFrame,text='').grid(row=8,column=0,columnspan=19)
+
+for i in range(57, 72):# f block
+	start=58
+	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+	               command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='red').grid(row=9,
+                                                                                                column=i-57+3)
+for i in range(89, 104):  # f block 
+	    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+	           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='pink').grid(row=10,
+                                                                                                column=i-89+3)
+imgFrame = LabelFrame(pt_notebook,pady=10)
+imgFrame.grid(row=1, column=1, columnspan=3, rowspan=2,sticky=W+E)
+pt_notebook.add(imgFrame,text='  Periodic Table Image   ')
+
+
+
+
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
+
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+#Making the the help screen
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
+
+HelpFrame=Frame(my_notebook,padx=12,pady=10)
+HelpFrame.pack(fill='both',expand=1)
+my_notebook.add(HelpFrame,text='   Help   ')
+
+
+
+
+#____________________________________________________________________________________________________________
+#------------------------------------------------------------------------------------------------------------
+#____________________________________________________________________________________________________________
 
 mainloop()
