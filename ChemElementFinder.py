@@ -81,7 +81,7 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            54: ['Xenon', 'Xe', '131.29', '131', 'p', 18, 5, '[Kr] 4d10 5s2 5p6'],
            55: ['Cesium', 'Cs', '132.905', '133', 's', 1, 6, '[Xe] 6s1'],
            56: ['Barium', 'Ba', '137.33', '137', 's', 2, 6, '[Xe] 6s2'],
-           57: ['Lanthanum', 'La', '138.91', '139', 'd', 3, 7, '[Rn]  5d1 6s2'],
+           57: ['Lanthanum', 'La', '138.91', '139', 'd', 3, 6, '[Rn]  5d1 6s2'],
            58: ['Cerium', 'Ce', '140.12', '140', 'f', '4f', 1, '[Xe] 4f1 5d1 6s2'],
            59: ['Praseodymium', 'Pr', '140.91', '141', 'f', '4f', 1, '[Xe] 4f3 5d0 6s2'],
            60: ['Neodymium', 'Nd', '144.24', '144', 'f', '4f', 1, '[Xe] 4f4 5d0 6s2'],
@@ -377,29 +377,48 @@ pt_label=Label(ptFrame,text='Click on any of the symbol given here to\n see info
 pt_label.grid(row=2,column=3,columnspan=10,rowspan=2)
 
 
-for i in range(1, 57):
-    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
-           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='blue').grid(row=bigdict[i][6],
+for i in range(1, 58):
+	if bigdict[i][4]=='s':
+		colour='red'
+	if bigdict[i][4]=='p':
+		colour='green'
+	if bigdict[i][4]=='d':
+		colour='purple'
+
+	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+    	command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg=colour).grid(row=bigdict[i][6],
                                                                                             column=bigdict[i][5])
-for i in range(72, 89):  # f block interruption
-    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
-           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='purple').grid(row=bigdict[i][6],
+for i in range(72, 90):  # f block interruption
+	if bigdict[i][4]=='s':
+		colour='red'
+	if bigdict[i][4]=='p':
+		colour='green'
+	if bigdict[i][4]=='d':
+		colour='purple'
+	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+	       command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg=colour).grid(row=bigdict[i][6],
                                                                                             column=bigdict[i][5])
 for i in range(104, 119):  # f block interruption
-    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
-           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='green').grid(row=bigdict[i][6],
+	if bigdict[i][4]=='s':
+		colour='red'
+	if bigdict[i][4]=='p':
+		colour='green'
+	if bigdict[i][4]=='d':
+		colour='purple'
+	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
+		command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg=colour).grid(row=bigdict[i][6],
                                                                                             column=bigdict[i][5])
 GapLabel=Label(ptFrame,text='').grid(row=8,column=0,columnspan=19)
 
-for i in range(57, 72):# f block
+for i in range(58, 72):# f block
 	start=58
 	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
-	               command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='red').grid(row=9,
-                                                                                                column=i-57+3)
-for i in range(89, 104):  # f block 
+	               command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='blue').grid(row=9,
+                                                                                                column=i-57+2)
+for i in range(90, 104):  # f block 
 	    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
-	           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='pink').grid(row=10,
-                                                                                                column=i-89+3)
+	           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='blue').grid(row=10,
+                                                                                                column=i-89+2)
 imgFrame = LabelFrame(pt_notebook,pady=10)
 imgFrame.grid(row=1, column=1, columnspan=3, rowspan=2,sticky=W+E)
 pt_notebook.add(imgFrame,text='  Periodic Table Image   ')
