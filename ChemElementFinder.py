@@ -381,7 +381,7 @@ for i in range(1, 58):
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='green'
+		colour='yellow'
 	if bigdict[i][4]=='d':
 		colour='purple'
 
@@ -392,7 +392,7 @@ for i in range(72, 90):  # f block interruption
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='green'
+		colour='yellow'
 	if bigdict[i][4]=='d':
 		colour='purple'
 	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
@@ -402,7 +402,7 @@ for i in range(104, 119):  # f block interruption
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='green'
+		colour='yellow'
 	if bigdict[i][4]=='d':
 		colour='purple'
 	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
@@ -419,9 +419,49 @@ for i in range(90, 104):  # f block
 	    Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
 	           command=lambda i=i: search(i, 'Atomic Number',way='PT'), fg='blue').grid(row=10,
                                                                                                 column=i-89+2)
-imgFrame = LabelFrame(pt_notebook,pady=10)
+
+#To show the periodic table image
+#__________________________________________________________________________
+
+imgFrame = LabelFrame(pt_notebook)#Creating the main frame for adding the image
 imgFrame.grid(row=1, column=1, columnspan=3, rowspan=2,sticky=W+E)
 pt_notebook.add(imgFrame,text='  Periodic Table Image   ')
+
+#Creating a canvas
+ptCanvas=Canvas(imgFrame,width=1300,height=584)
+ptCanvas.grid(row=0,column=0,sticky=W+E)
+
+#Add a scrollbar to the canvas
+pt_scrollbarY=ttk.Scrollbar(imgFrame,orient=VERTICAL,command=ptCanvas.yview)
+pt_scrollbarY.grid(row=0,column=1,sticky=N+S)
+
+pt_scrollbarX=ttk.Scrollbar(imgFrame,orient=HORIZONTAL,command=ptCanvas.xview)
+pt_scrollbarX.grid(row=1,column=0,sticky=W+E)
+
+#Configure the canvas
+ptCanvas.configure(yscrollcommand=pt_scrollbarY.set)
+ptCanvas.bind('<Configure>',lambda e:ptCanvas.configure(scrollregion=ptCanvas.bbox('all')))
+
+ptCanvas.configure(xscrollcommand=pt_scrollbarX.set)
+ptCanvas.bind('<Configure>',lambda e:ptCanvas.configure(scrollregion=ptCanvas.bbox('all')))
+
+
+#Create another frame inside the canvas
+periodictableimage=ImageTk.PhotoImage(Image.open('periodictable.png'))
+periodictableFrame=Frame(ptCanvas)
+
+#Add that New frame to a window in the canvas
+ptCanvas.create_window((3,3),window=periodictableFrame,anchor=NW)
+
+#Opening the image
+ptimg=(Image.open('periodictable.png'))
+
+#Resizing the image
+
+ptimg=ImageTk.PhotoImage(ptimg)
+ptimgLabel=Label(periodictableFrame,image=ptimg)
+ptimgLabel.grid(row=0,column=0)
+#	_______________________________________________________________________
 
 
 
