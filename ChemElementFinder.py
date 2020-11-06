@@ -5,7 +5,26 @@ from PIL import ImageTk, Image # For showing images with Tkinter
 
 from tkinter import messagebox #For showing popup messages on errors
 
-root = Tk()#making the main window for user interaction
+from tkinter import ttk #For showing different tabs in the interface
+
+root = Tk()#Making the main window for user interaction
+
+my_notebook=ttk.Notebook(root)#Creating a notebook to show tabs
+
+my_notebook.grid(row=0,column=0)
+
+HomeFrame=Frame(my_notebook,padx=12,pady=10)
+HomeFrame.pack(fill='both',expand=1)
+my_notebook.add(HomeFrame,text='Home')
+
+PeriodicTableFrame=Frame(my_notebook,padx=12,pady=10)
+PeriodicTableFrame.pack(fill='both',expand=1)
+my_notebook.add(PeriodicTableFrame,text='Periodic Table')
+
+HelpFrame=Frame(my_notebook,padx=12,pady=10)
+HelpFrame.pack(fill='both',expand=1)
+my_notebook.add(HelpFrame,text='HelpFrame')
+
 
 root.title('ChemElement Finder')#Setting title of the window
 
@@ -134,16 +153,31 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            117: ['Tennessine', 'Ts', '294', '294', 'p', 17, 7, '[Rn] 6d10 7s2 7p5'],
            118: ['Oganesson', 'Og', '294', '294', 'p', 18, 7, '[Rn] 6d10 7s2 7p6']
            }
+#All the functions come here
+#_____________________________________________________________________________________________________________
+
+
+
+
+
+
+#____________________________________________________________________________________________________________
+
+
+
+
+
+
 
 # Making the BaseFrame to show credits
 #_________________________________________________________________________________
-BaseFrame = LabelFrame(root, text='Credits', padx=10, pady=2, bd=4, relief=SUNKEN)
+BaseFrame = LabelFrame(root, text='Credits', padx=8, pady=2, bd=4, relief=SUNKEN)
 
-BaseFrame.grid(row=3, column=0, columnspan=5, sticky=W + E)
+BaseFrame.grid(row=1, column=0, columnspan=5, sticky=W + E)
 
 # Creating a label to add the text in the BaseFrame
-BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 11 * (
-    "	") + "Subject Teacher : Nishant Dubey (PGT Computer Science) ", font=('Calibri', 10), anchor=W, fg='black')
+BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 10 * (
+    "	") + "Subject Teacher : Nishant Dubey (PGT Computer Science) ", font=('Calibri', 12), anchor=W, fg='black')
 
 BaseLabel.pack() # Packing the BaseLabel in the frame
 #_________________________________________________________________________________
@@ -152,17 +186,17 @@ BaseLabel.pack() # Packing the BaseLabel in the frame
 
 # Making the frame to show links related to elements
 #_______________________________________________________________
-LinkFrame = LabelFrame(root, text='LINKS', padx=75, pady=290)
+LinkFrame = LabelFrame(HomeFrame, text='LINKS', padx=75, pady=290)
 LinkFrame.grid(row=1, column=0, columnspan=1, rowspan=2)
 
-EmptyLabel=Label(LinkFrame,text='')
-EmptyLabel.pack()
+EmptyLabel=Label(LinkFrame,text='')#Adding an empty label into the frame to avoid puncture 
+EmptyLabel.pack()# Packing the EmptyLabel 
 #_______________________________________________________________
 
 
 # The search frame to search for elements
 #_____________________________________________________________________________________
-SearchFrame = LabelFrame(root, text='SEARCH BOX', )
+SearchFrame = LabelFrame(HomeFrame, text='SEARCH BOX', )
 SearchFrame.grid(row=1, column=4)
 
 SearchEntry = Entry(SearchFrame, width=20, font=('Comic Sans Ms', 15))#Creating a text box for taking search input
@@ -187,7 +221,7 @@ SearchButton.grid(row=2, column=0, columnspan=2, pady=20)#Positioning the Button
 
 #Making the frame to show the results of the search
 #_______________________________________________________
-SearchResultsFrame = LabelFrame(root, text='Search results')# Making a frame to contain InfoFrame and DInfoFrame
+SearchResultsFrame = LabelFrame(HomeFrame, text='Search results')# Making a frame to contain InfoFrame and DInfoFrame
 SearchResultsFrame.grid(row=1, column=1, columnspan=3, rowspan=2)# Positioning the Frame
 SearchLabel = Label(SearchResultsFrame, text='Active', bd=2, anchor=NW, relief=SOLID)#To show the status of the SearchResultsFrame
 SearchLabel.grid(row=0, column=0, sticky=W + E)#Positioning the Label
@@ -207,7 +241,7 @@ DInfoFrameLabel.grid(row=0, column=0, padx=325, pady=150)
 
 # The image frame
 #_____________________________________________________________________________________
-ImageFrame = LabelFrame(root, text='Image Box')#Creating frame to contain Images
+ImageFrame = LabelFrame(HomeFrame, text='Image Box')#Creating frame to contain Images
 ImageFrame.grid(row=2, column=4)#Positioning the Frames
 
 ImageLabel = Label(ImageFrame, text='Images come here', padx=20, pady=20)#Adding label to the frame to avoid puncture 
