@@ -7,6 +7,10 @@ from tkinter import messagebox #For showing popup messages on errors
 
 from tkinter import ttk #For showing different tabs in the interface
 
+import os
+
+import webbrowser
+
 root = Tk()#Making the main window for user interaction
 
 my_notebook=ttk.Notebook(root)#Creating a notebook to show tabs
@@ -232,7 +236,59 @@ def search(val,type_,way='SearchBox'):
 	    BlockLabel.grid(row=6, column=0, sticky=W)
 	    GroupLabel.grid(row=7, column=0, sticky=W)
 	    PeriodLabel.grid(row=8, column=0, sticky=W)
-	
+
+	    EmptyLabel.grid_forget()
+
+	    for widget in OfflineFrame.winfo_children():
+	    	widget.destroy()
+	    	continue
+	    for widget in OnlineFrame.winfo_children():
+	    	widget.destroy()
+
+	    class HoverLabel(Label):
+		    def __init__(self, master, **kw):
+		        Label.__init__(self,master=master,**kw)
+		        self.defaultForeground = self["foreground"]
+		        self.bind("<Enter>", self.on_enter)
+		        self.bind("<Leave>", self.on_leave)
+
+		    def on_enter(self, e):
+		        self['foreground'] = self['activeforeground']
+
+		    def on_leave(self, e):
+		        self['foreground'] = self.defaultForeground
+
+
+	    OfflineLink=HoverLabel(OfflineFrame,text=bigdict[a][0]+'-RSC',fg='blue', cursor="hand2",bd=1,activeforeground='red')
+	    OfflineLink.bind("<Button-1>", lambda e: offlinelinkopener(os.getcwd()+"/elements/"+str(bigdict[a][0]+'.htm')))
+	    
+	    OfflineLink.pack(pady=3+1)
+
+	    WikiLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'- Wikipedia',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+	    WikiLink.bind("<Button-1>", lambda e: onlinelinkopener('https://en.wikipedia.org/wiki/'+bigdict[a][0]))
+	    WikiLink.pack(pady=3+1)
+
+	    BritLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Britanicca',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+	    BritLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.britannica.com/science/'+bigdict[a][0].lower()))
+	    BritLink.pack(pady=3+1)
+
+	    YTLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Youtube Search',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+	    YTLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.youtube.com/results?search_query='+bigdict[a][0].lower()+' periodic videos'))
+	    YTLink.pack(pady=3+1)
+
+	    PCLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-PubChem',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+	    PCLink.bind("<Button-1>", lambda e: onlinelinkopener('https://pubchem.ncbi.nlm.nih.gov/compound/'+bigdict[a][0].lower()))
+	    PCLink.pack(pady=3+1)
+
+	    LinkFrame.config(padx=20)
+	    LinkFrame.config(pady=216)
+
+
+
+
+	    
+
+	    
 	except:
 
 	    SearchLabel.grid_forget()
@@ -243,8 +299,18 @@ def search(val,type_,way='SearchBox'):
 	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' +'Element with atomic number '+str(a)+' does not exist'+ '\nPlease try again')
 	    else:
 	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' + 'Please try again')
-#_____________________________________________________________
+	
 
+
+#_____________________________________________________________
+#Function to open offline links
+#_____________________________________________________________
+def offlinelinkopener(link):
+	os.startfile(link)
+
+def onlinelinkopener(link):
+	webbrowser.open(link)
+#_____________________________________________________________
 #____________________________________________________________________________________________________________
 #------------------------------------------------------------------------------------------------------------
 #____________________________________________________________________________________________________________
@@ -275,7 +341,7 @@ BaseFrame = LabelFrame(root, text='Credits', padx=8, pady=2, bd=4, relief=SUNKEN
 BaseFrame.grid(row=1, column=0, columnspan=5, sticky=W + E)
 
 # Creating a label to add the text in the BaseFrame
-BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 10 * (
+BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 9 * (
     "	") + "Subject Teacher : Nishant Dubey (PGT Computer Science) ", font=('Calibri', 12), anchor=W, fg='black')
 
 BaseLabel.pack() # Packing the BaseLabel in the frame
@@ -285,11 +351,19 @@ BaseLabel.pack() # Packing the BaseLabel in the frame
 
 # Making the frame to show links related to elements
 #_______________________________________________________________
-LinkFrame = LabelFrame(HomeFrame, text='LINKS', padx=75, pady=290)
-LinkFrame.grid(row=1, column=0, columnspan=1, rowspan=2)
+LinkFrame = LabelFrame(HomeFrame, text='LINKS',padx=80,pady=295)
+LinkFrame.grid(row=1, column=0, columnspan=1, rowspan=2,padx=10)
+
+
+OnlineFrame=LabelFrame(LinkFrame,text='Online links',bd=3,relief=SUNKEN)
+OnlineFrame.place(x=-14,y=-160)
+
+OfflineFrame=LabelFrame(LinkFrame,text='Offline links',bd=3,relief=SUNKEN)
+OfflineFrame.place(x=14,y=-220)
+
 
 EmptyLabel=Label(LinkFrame,text='')#Adding an empty label into the frame to avoid puncture 
-EmptyLabel.pack()# Packing the EmptyLabel 
+EmptyLabel.grid(row=0,column=0)#Packing the EmptyLabel 
 #_______________________________________________________________
 
 
@@ -344,7 +418,7 @@ ImageFrame = LabelFrame(HomeFrame, text='Image Box')#Creating frame to contain I
 ImageFrame.grid(row=2, column=4)#Positioning the Frames
 
 ImageLabel = Label(ImageFrame, text='Images come here', padx=20, pady=20)#Adding label to the frame to avoid puncture 
-ImageLabel.grid(row=0, column=0, padx=130, pady=155)#Positioning the label
+ImageLabel.grid(row=0, column=0, padx=125, pady=155)#Positioning the label
 #_____________________________________________________________________________________
 
 #____________________________________________________________________________________________________________
@@ -381,7 +455,7 @@ for i in range(1, 58):
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='yellow'
+		colour='#9ca819'
 	if bigdict[i][4]=='d':
 		colour='purple'
 
@@ -392,7 +466,7 @@ for i in range(72, 90):  # f block interruption
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='yellow'
+		colour='#9ca819'
 	if bigdict[i][4]=='d':
 		colour='purple'
 	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
@@ -402,7 +476,7 @@ for i in range(104, 119):  # f block interruption
 	if bigdict[i][4]=='s':
 		colour='red'
 	if bigdict[i][4]=='p':
-		colour='yellow'
+		colour='#9ca819'
 	if bigdict[i][4]=='d':
 		colour='purple'
 	Button(ptFrame, text=bigdict[i][1], font=('Comic Sans Ms', 19),
