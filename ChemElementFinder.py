@@ -11,13 +11,30 @@ import os
 
 import webbrowser
 
+import wikipedia
+
 root = Tk()#Making the main window for user interaction
 
 my_notebook=ttk.Notebook(root)#Creating a notebook to show tabs
 
 my_notebook.grid(row=0,column=0)
 
+a=0
 
+class HoverLabel(Label):
+
+	def __init__(self, master, **kw):
+	    Label.__init__(self,master=master,**kw)
+	    self.defaultForeground = self["foreground"]
+	    self.bind("<Enter>", self.on_enter)
+	    self.bind("<Leave>", self.on_leave)
+
+	def on_enter(self, e):
+	    self['foreground'] = self['activeforeground']
+
+
+	def on_leave(self, e):
+	    self['foreground'] = self.defaultForeground
 
 
 
@@ -57,7 +74,7 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            26: ['Iron(Ferrum)', 'Fe', '55.845', '56', 'd', 8, 4, '[Ar]3d6 4s2'],
            27: ['Cobalt', 'Co', '58.933', '59', 'd', 9, 4, '[Ar]3d7 4s2'],
            28: ['Nickel', 'Ni', '58.71', '59', 'd', 10, 4, '[Ar]3d8 4s2'],
-           29: ['Copper(Cuprum', 'Cu', '63.546', '63.5', 'd', 11, 4, '[Ar]3d10 4s1'],
+           29: ['Copper(Cuprum)', 'Cu', '63.546', '63.5', 'd', 11, 4, '[Ar]3d10 4s1'],
            30: ['Zinc', 'Zn', '65.39', '65', 'd', 12, 4, '[Ar]3d10 4s2'],
            31: ['Gallium', 'Ga', '69.723', '70', 'p', 13, 4, '[Ar] 3d10 4s2 4p1'],
            32: ['Germanium', 'Ge', '72.61', '73', 'p', 14, 4, '[Ar] 3d10 4s2 4p2'],
@@ -67,7 +84,7 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            36: ['Krypton', 'Kr', '83.80', '84', 'p', 18, 4, '[Ar] 3d10 4s2 4p6'],
            37: ['Rubidium', 'Rb', '85.468', '85', 's', 1, 5, '[Kr] 5s1'],
            38: ['Strontium', 'Sr', '87.62', '88', 's', 2, 5, '[Kr] 5s2'],
-           39: ['Ytterium', 'Y', '88.906', '89', 'd', 3, 5, '[Kr]4d1 5s2'],
+           39: ['Yttrium', 'Y', '88.906', '89', 'd', 3, 5, '[Kr]4d1 5s2'],
            40: ['Zirconium', 'Zr', '91.224', '91', 'd', 4, 5, '[Kr]4d2 5s2'],
            41: ['Niobium', 'Nb', '92.906', '93', 'd', 5, 5, '[Kr]4d4 5s1'],
            42: ['Molybdenum', 'Mo', '95.94', '96', 'd', 6, 5, '[Kr]4d5 5s1'],
@@ -83,7 +100,7 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            52: ['Tellurium', 'Te', '127.60', '128', 'p', 16, 5, '[Kr] 4d10 5s2 5p4'],
            53: ['Iodine', 'I', '126.90', '127', 'p', 17, 5, '[Kr] 4d10 5s2 5p5'],
            54: ['Xenon', 'Xe', '131.29', '131', 'p', 18, 5, '[Kr] 4d10 5s2 5p6'],
-           55: ['Cesium', 'Cs', '132.905', '133', 's', 1, 6, '[Xe] 6s1'],
+           55: ['Caesium', 'Cs', '132.905', '133', 's', 1, 6, '[Xe] 6s1'],
            56: ['Barium', 'Ba', '137.33', '137', 's', 2, 6, '[Xe] 6s2'],
            57: ['Lanthanum', 'La', '138.91', '139', 'd', 3, 6, '[Rn]  5d1 6s2'],
            58: ['Cerium', 'Ce', '140.12', '140', 'f', '4f', 1, '[Xe] 4f1 5d1 6s2'],
@@ -136,7 +153,7 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
            105: ['Dubnium', 'Db', '261.11', '261', 'd', 5, 7, '[Rn]5f14 6d3 7s2'],
            106: ['Seaborgium', 'Sg', '263.12', '263', 'd', 6, 7, '[Rn] 5f14 6d4 7s2'],
            107: ['Bohrium', 'Bh', '262.12', '262', 'd', 7, 7, '[Rn] 5f14 6d5 7s2'],
-           108: ['Hassnium', 'Hs', '265', '265', 'd', 8, 7, '[Rn] 5f14 6d6 7s2'],
+           108: ['Hassium', 'Hs', '265', '265', 'd', 8, 7, '[Rn] 5f14 6d6 7s2'],
            109: ['Meitnerium', 'Mt', '268', '268', 'd', 9, 7, '[Rn] 5f14 6d7 7s2'],
            110: ['Darmstadtium', 'Ds', '269', '269', 'd', 10, 7, '[Rn] 5f14 6d8 7s2'],
            111: ['Roentgenium', 'Rg', '272', '272', 'd', 11, 7, '[Rn] 5f14 6d10 7s1'],
@@ -161,6 +178,9 @@ bigdict = {1: ['Hydrogen', 'H', '1.008', '1', 's', 1, 1, '1s1'],
 #search function
 #____________________________________________________________
 def search(val,type_,way='SearchBox'):
+	global a
+
+	
 
 	if SearchEntry.get() not in '                                ':
 		SearchEntry.delete(0, END)
@@ -202,50 +222,63 @@ def search(val,type_,way='SearchBox'):
 	            if val.lower() in (bigdict[i][0]).lower() and len(val) >= 3:
 	                a = i
 	                type_ = 'Name'
+	'''for widget in InfoFrame.winfo_children():
+		widget.destroy()'''
 
+	InfoFrameLabel.grid_forget()
 	InfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)
-	InfoFrame.grid(row=1, column=0, sticky=W + E)
-	
+	InfoFrame.grid(row=1, column=0, sticky=N+S+W+E,padx=3,pady=3)
+
+	infoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)
+	infoFrame.grid(row=1, column=1, sticky=N+S+W+E,padx=3,pady=3)
+
+	InfoFrame.config(padx=0)
+	infoFrame.config(padx=0)
+
 	SearchLabel = Label(SearchResultsFrame, text="You searched for " + type_ + ' ' + str(SearchEntry.get()), anchor=NW,
 	                    bd=3, relief=SUNKEN)
-	SearchLabel.grid(row=0, column=0, sticky=W + E)
+	SearchLabel.grid(row=0, column=0, sticky=W + E,columnspan=2)
 
 	try:
-	    AtnoLabel = Label(InfoFrame, text='Atomic Number:		' + str(a), anchor=W, font=('Comic Sans Ms', 13),
-	                       fg='blue')
-	    NameLabel = Label(InfoFrame, text='Name:			' + bigdict[a][0], anchor=W, font=('Comic Sans Ms', 13),
-	                       fg='green')
-	    SymbolLabel = Label(InfoFrame, text='Symbol:			' + bigdict[a][1], anchor=W, font=('Comic Sans Ms', 13),
-	                       fg='red')
-	    AtmassLabel = Label(InfoFrame, text='Atomic Mass:		' + str(bigdict[a][2]), anchor=W,font=('Comic Sans Ms', 13), 
-	    				   fg='violet')
-	    MassnonoLabel = Label(InfoFrame, text='Mass Number:		' + str(bigdict[a][3]), anchor=W,font=('Comic Sans Ms', 13),
-	                       fg='indigo')
-	    BlockLabel = Label(InfoFrame, text='Block:			' + bigdict[a][4], anchor=W, font=('Comic Sans Ms', 13),
-	                       fg='brown')
-	    GroupLabel = Label(InfoFrame, text='Group:			' + str(bigdict[a][5]), anchor=W,font=('Comic Sans Ms', 13),
-	                       fg='grey')
-	    PeriodLabel = Label(InfoFrame, text='Period:			' + str(bigdict[a][6]), anchor=W,font=('Comic Sans Ms', 13),
-	                       fg='purple')
+		AtnoLabel = Label(InfoFrame, text='Atomic Number:	' + str(a), anchor=SW, font=('Comic Sans Ms', 16),
+		                   fg='blue')
+		NameLabel = Label(infoFrame, text='Name:		' + bigdict[a][0], anchor=W, font=('Comic Sans Ms', 16),
+		                   fg='green')
+		SymbolLabel = Label(InfoFrame, text='Symbol:		' + bigdict[a][1], anchor=W, font=('Comic Sans Ms', 16),
+		                   fg='red')
+		AtmassLabel = Label(infoFrame, text='Atomic Mass:	' + str(bigdict[a][2]), anchor=W,font=('Comic Sans Ms', 16), 
+						   fg='violet')
+		MassnonoLabel = Label(InfoFrame, text='Mass Number:	' + str(bigdict[a][3]), anchor=W,font=('Comic Sans Ms', 16),
+		                   fg='indigo')
+		BlockLabel = Label(infoFrame, text='Block:		' + bigdict[a][4], anchor=W, font=('Comic Sans Ms', 16),
+		                   fg='brown')
+		GroupLabel = Label(InfoFrame, text='Group:		' + str(bigdict[a][5]), anchor=W,font=('Comic Sans Ms', 16),
+		                   fg='grey')
+		PeriodLabel = Label(infoFrame, text='Period:		' + str(bigdict[a][6]), anchor=SW,font=('Comic Sans Ms', 16),
+		                   fg='purple')
 
-	    AtnoLabel.grid(row=1, column=0, sticky=W)
-	    NameLabel.grid(row=2, column=0, sticky=W)
-	    SymbolLabel.grid(row=3, column=0, sticky=W)
-	    AtmassLabel.grid(row=4, column=0, sticky=W)
-	    MassnonoLabel.grid(row=5, column=0, sticky=W)
-	    BlockLabel.grid(row=6, column=0, sticky=W)
-	    GroupLabel.grid(row=7, column=0, sticky=W)
-	    PeriodLabel.grid(row=8, column=0, sticky=W)
+		AtnoLabel.grid(row=1, column=0, sticky=W)
+		NameLabel.grid(row=1, column=1, sticky=W)
+		SymbolLabel.grid(row=2, column=0, sticky=W)
+		AtmassLabel.grid(row=2, column=1, sticky=W)
+		MassnonoLabel.grid(row=3, column=0, sticky=W)
+		BlockLabel.grid(row=3, column=1, sticky=W)
+		GroupLabel.grid(row=4, column=0, sticky=W)
+		PeriodLabel.grid(row=4, column=1, sticky=W)
 
-	    EmptyLabel.grid_forget()
+		EmptyLabel.grid_forget()
 
-	    for widget in OfflineFrame.winfo_children():
-	    	widget.destroy()
-	    	continue
-	    for widget in OnlineFrame.winfo_children():
-	    	widget.destroy()
+		for widget in OfflineFrame.winfo_children():
+			widget.destroy()
+			continue
+		for widget in OnlineFrame.winfo_children():
+			widget.destroy()
 
-	    class HoverLabel(Label):
+		for widget in DInfoFrame.winfo_children():
+			widget.destroy()
+
+		class HoverLabel(Label):
+
 		    def __init__(self, master, **kw):
 		        Label.__init__(self,master=master,**kw)
 		        self.defaultForeground = self["foreground"]
@@ -255,40 +288,61 @@ def search(val,type_,way='SearchBox'):
 		    def on_enter(self, e):
 		        self['foreground'] = self['activeforeground']
 
+
 		    def on_leave(self, e):
 		        self['foreground'] = self.defaultForeground
 
+		OfflineLink=HoverLabel(OfflineFrame,text=bigdict[a][0]+'-RSC',fg='blue', cursor="hand2",bd=1,activeforeground='red')
+		OfflineLink.bind("<Button-1>", lambda e: offlinelinkopener(os.getcwd()+"/elements/"+str(bigdict[a][0]+'.htm')))
+		OfflineLink.pack(pady=3+1)
 
-	    OfflineLink=HoverLabel(OfflineFrame,text=bigdict[a][0]+'-RSC',fg='blue', cursor="hand2",bd=1,activeforeground='red')
-	    OfflineLink.bind("<Button-1>", lambda e: offlinelinkopener(os.getcwd()+"/elements/"+str(bigdict[a][0]+'.htm')))
-	    
-	    OfflineLink.pack(pady=3+1)
+		WikiLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'- Wikipedia',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+		WikiLink.bind("<Button-1>", lambda e: onlinelinkopener('https://en.wikipedia.org/wiki/'+bigdict[a][0]))
+		WikiLink.pack(pady=3+1)
 
-	    WikiLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'- Wikipedia',fg='blue',cursor='hand2',bd=1,activeforeground='red')
-	    WikiLink.bind("<Button-1>", lambda e: onlinelinkopener('https://en.wikipedia.org/wiki/'+bigdict[a][0]))
-	    WikiLink.pack(pady=3+1)
+		BritLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Britanicca',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+		BritLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.britannica.com/science/'+bigdict[a][0].lower()))
+		BritLink.pack(pady=3+1)
 
-	    BritLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Britanicca',fg='blue',cursor='hand2',bd=1,activeforeground='red')
-	    BritLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.britannica.com/science/'+bigdict[a][0].lower()))
-	    BritLink.pack(pady=3+1)
+		YTLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Youtube Search',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+		YTLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.youtube.com/results?search_query='+bigdict[a][0].lower()+' periodic videos'))
+		YTLink.pack(pady=3+1)
 
-	    YTLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-Youtube Search',fg='blue',cursor='hand2',bd=1,activeforeground='red')
-	    YTLink.bind("<Button-1>", lambda e: onlinelinkopener('https://www.youtube.com/results?search_query='+bigdict[a][0].lower()+' periodic videos'))
-	    YTLink.pack(pady=3+1)
+		PCLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-PubChem',fg='blue',cursor='hand2',bd=1,activeforeground='red')
+		PCLink.bind("<Button-1>", lambda e: onlinelinkopener('https://pubchem.ncbi.nlm.nih.gov/compound/'+bigdict[a][0].lower()))
+		PCLink.pack(pady=3+1)
 
-	    PCLink=HoverLabel(OnlineFrame,text=bigdict[a][0]+'-PubChem',fg='blue',cursor='hand2',bd=1,activeforeground='red')
-	    PCLink.bind("<Button-1>", lambda e: onlinelinkopener('https://pubchem.ncbi.nlm.nih.gov/compound/'+bigdict[a][0].lower()))
-	    PCLink.pack(pady=3+1)
-
-	    LinkFrame.config(padx=20)
-	    LinkFrame.config(pady=216)
+		LinkFrame.config(padx=20)
+		LinkFrame.config(pady=216)
 
 
+		#Opening the image
+		img=ImageTk.PhotoImage((Image.open(os.getcwd()+'/images/'+str(bigdict[a][0]+'.jpg'))).resize((350,350),Image.ANTIALIAS))
+		showimg=Image.open(os.getcwd()+'/images/'+str(bigdict[a][0]+'.jpg'))
+
+		ImageLabel=Label(ImageFrame,image=img,cursor='hand2')
+		
+		ImageLabel.bind("<Button-1>",lambda e:showimg.show())
+		ImageLabel.grid(row=0,column=0,padx=0)
+
+		
+		
+		InfoScroll=Scrollbar(DInfoFrame,orient=VERTICAL)
+		InfoScroll.pack(side=RIGHT,fill=Y)
+
+		DInfoFrameLabel.pack_forget()
+		#Making a text box to show detailed info
+		DinfoBox=Text(DInfoFrame,width=20,height=12,font=('Comic Sans Ms',15),fg='blue',yscrollcommand=InfoScroll.set)
+		DinfoBox.pack(expand=1,fill='both',anchor=E)
+
+		InfoScroll.config(command=DinfoBox.yview)
+
+		DinfoBox.insert(END,wikipedia.summary(bigdict[a][0]+' element'))
 
 
-	    
 
-	    
+
+		    
 	except:
 
 	    SearchLabel.grid_forget()
@@ -299,7 +353,17 @@ def search(val,type_,way='SearchBox'):
 	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' +'Element with atomic number '+str(a)+' does not exist'+ '\nPlease try again')
 	    else:
 	    	messagebox.showwarning('ERROR', 'Invalid Search of type : '+str(type_) + '\n' + 'Please try again')
-	
+
+	if a==0 or a==1:
+		LeftButton.config(state='disabled')
+	else:
+		LeftButton.config(state='active')
+
+	if a==118 :
+		RightButton.config(state='disabled')
+	else:
+		RightButton.config(state='active')	
+	img.show()
 
 
 #_____________________________________________________________
@@ -373,21 +437,42 @@ SearchFrame = LabelFrame(HomeFrame, text='SEARCH BOX', )
 SearchFrame.grid(row=1, column=4)
 
 SearchEntry = Entry(SearchFrame, width=20, font=('Comic Sans Ms', 15))#Creating a text box for taking search input
-SearchEntry.grid(row=0, column=0, pady=30, columnspan=2, padx=50)#Positioning the text box
+SearchEntry.grid(row=0, column=0, pady=30, columnspan=6, padx=50)#Positioning the text box
 
 urchoice = StringVar()#Making a variable to store the choice taken from below created OptionMenu
 choices = OptionMenu(SearchFrame, urchoice, 'Atomic Number', 'Name', 'Symbol', 'Any')#Creating the OptionMenu
-choices.grid(row=1, column=1, pady=10)#Positioning the OptionMenu
+choices.grid(row=1, column=4, pady=10,columnspan=3)#Positioning the OptionMenu
 urchoice.set('Any')#Setting default option in the OptionMenu
 
 
 SearchByLabel = Label(SearchFrame, text='Search By', font=('Calibri', 15))#Creating label to contain hint text
-SearchByLabel.grid(row=1, column=0, pady=10)#Positioning the label
+SearchByLabel.grid(row=1, column=0, pady=10,columnspan=3)#Positioning the label
 
 
 SearchButton = Button(SearchFrame, text='Search', font=('Calibri', 15),
                       command=lambda: search(SearchEntry.get(), urchoice.get()))#Button to call the search command
-SearchButton.grid(row=2, column=0, columnspan=2, pady=20)#Positioning the Button
+SearchButton.grid(row=2, column=2, columnspan=2, pady=20)#Positioning the Button
+
+
+
+LeftButton = Button(SearchFrame, text='<<', font=('Calibri', 15),
+                      command=lambda: search(str(a-1),'Any'),anchor=SW)#Button to call the search command
+if a==0 or a==1:
+	LeftButton.config(state='disabled')
+LeftButton.grid(row=2, column=0, columnspan=2, pady=5)#Positioning the Button
+
+
+
+RightButton = Button(SearchFrame, text='>>', font=('Calibri', 15),
+                      command=lambda: search(str(a+1),'Any'),anchor=SE)#Button to call the search command
+if a==118 :
+	RightButton.config(state='disabled')
+
+RightButton.grid(row=2, column=4, columnspan=2, pady=5)#Positioning the Button
+
+
+
+
 #_____________________________________________________________________________________
 
 
@@ -397,17 +482,17 @@ SearchButton.grid(row=2, column=0, columnspan=2, pady=20)#Positioning the Button
 SearchResultsFrame = LabelFrame(HomeFrame, text='Search results')# Making a frame to contain InfoFrame and DInfoFrame
 SearchResultsFrame.grid(row=1, column=1, columnspan=3, rowspan=2)# Positioning the Frame
 SearchLabel = Label(SearchResultsFrame, text='Active', bd=2, anchor=NW, relief=SOLID)#To show the status of the SearchResultsFrame
-SearchLabel.grid(row=0, column=0, sticky=W + E)#Positioning the Label
+SearchLabel.grid(row=0, column=0, sticky=W + E,columnspan=2)#Positioning the Label
 
 InfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)#Making a frame to contain the basic info
-InfoFrame.grid(row=1, column=0, sticky=W + E)#Positioning the Frame
+InfoFrame.grid(row=1, column=0, sticky=W + E,columnspan=2)#Positioning the Frame
 InfoFrameLabel = Label(InfoFrame, text='General Info here')#Adding label to the frame to avoid puncture 
-InfoFrameLabel.grid(row=0, column=0, padx=325, pady=110)
+InfoFrameLabel.grid(row=0, column=0, padx=325, pady=110,columnspan=2)
 
 DInfoFrame = LabelFrame(SearchResultsFrame, relief=SOLID)#Making a frame to contain the detailed info
-DInfoFrame.grid(row=2, column=0, sticky=W + E)#Positioning the Frame
+DInfoFrame.grid(row=2, column=0, sticky=W + E,columnspan=2)#Positioning the Frame
 DInfoFrameLabel = Label(DInfoFrame, text='Detailed Info Here')#Adding label to the frame to avoid puncture 
-DInfoFrameLabel.grid(row=0, column=0, padx=325, pady=150)
+DInfoFrameLabel.grid(row=1,column=0,padx=325, pady=150)
 #___________________________________________________________
 
 
@@ -419,6 +504,7 @@ ImageFrame.grid(row=2, column=4)#Positioning the Frames
 
 ImageLabel = Label(ImageFrame, text='Images come here', padx=20, pady=20)#Adding label to the frame to avoid puncture 
 ImageLabel.grid(row=0, column=0, padx=125, pady=155)#Positioning the label
+
 #_____________________________________________________________________________________
 
 #____________________________________________________________________________________________________________
