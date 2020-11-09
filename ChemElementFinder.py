@@ -331,13 +331,13 @@ def search(val,type_,way='SearchBox'):
 		InfoScroll.pack(side=RIGHT,fill=Y)
 
 		DInfoFrameLabel.pack_forget()
-		#Making a text box to show detailed info
-		DinfoBox=Text(DInfoFrame,width=20,height=12,font=('Comic Sans Ms',15),fg='blue',yscrollcommand=InfoScroll.set)
+		'''#Making a text box to show detailed info
+		DinfoBox=Text(DInfoFrame,width=20,height=12,font=('Monotype Corsiva',19),fg='magenta',yscrollcommand=InfoScroll.set,state=r)
 		DinfoBox.pack(expand=1,fill='both',anchor=E)
 
 		InfoScroll.config(command=DinfoBox.yview)
 
-		DinfoBox.insert(END,wikipedia.summary(bigdict[a][0]+' element'))
+		DinfoBox.insert(END,wikipedia.summary(bigdict[a][0]+' element'))'''
 
 
 
@@ -363,7 +363,16 @@ def search(val,type_,way='SearchBox'):
 		RightButton.config(state='disabled')
 	else:
 		RightButton.config(state='active')	
+	#Making a text box to show detailed info
+	DinfoBox=Text(DInfoFrame,width=20,height=12,font=('Comic Sans Ms',16),fg='#aa1d5a',yscrollcommand=InfoScroll.set,state='normal')
+	DinfoBox.pack(expand=1,fill='both',anchor=E)
+
+	InfoScroll.config(command=DinfoBox.yview)
+
+	DinfoBox.insert(END,wikipedia.summary(bigdict[a][0]+' element'))
+	DinfoBox.config(state='disabled')
 	img.show()
+	
 
 
 #_____________________________________________________________
@@ -405,7 +414,7 @@ BaseFrame = LabelFrame(root, text='Credits', padx=8, pady=2, bd=4, relief=SUNKEN
 BaseFrame.grid(row=1, column=0, columnspan=5, sticky=W + E)
 
 # Creating a label to add the text in the BaseFrame
-BaseLabel = Label(BaseFrame, text="Created By: Mayank,Shreyansh and Rudraansh" + 9 * (
+BaseLabel = Label(BaseFrame, text="Created By:Rudraansh,Shreyansh and Mayank" + 9 * (
     "	") + "Subject Teacher : Nishant Dubey (PGT Computer Science) ", font=('Calibri', 12), anchor=W, fg='black')
 
 BaseLabel.pack() # Packing the BaseLabel in the frame
